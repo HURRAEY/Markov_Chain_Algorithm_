@@ -1,0 +1,6 @@
+markov_music_generator/
+│
+├── app.py              # Flask 서버 코드
+├── templates/
+│   └── index.html      # HTML 페이지 파일
+└── static/             # (Optional) 정적 파일 경로 (CSS, JS 등)

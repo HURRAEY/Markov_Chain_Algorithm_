@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markov Chain Music Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        input, button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Markov Chain Music Generator</h1>
+
+<label for="start_note">Start Note (MIDI Number):</label>
+<input type="number" id="start_note" value="60" min="0" max="127">
+
+<label for="length">Sequence Length:</label>
+<input type="number" id="length" value="50" min="1">
+
+<button onclick="generateMusic()">Generate Music</button>
+
+<script>
+    async function generateMusic() {
+        const startNote = document.getElementById('start_note').value;
+        const length = document.getElementById('length').value;
+
+        const response = await fetch('/generate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                start_note: parseInt(startNote),
+                length: parseInt(length)
+            })
+        });
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'generated_music.mid';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+</script>
+
+</body>
+</html>
